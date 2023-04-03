@@ -1,3 +1,10 @@
+deps:
+    rustup target add wasm32-wasi
+    brew install knative/client/kn
+    brew install knative-sandbox/kn-plugins/quickstart
+    helm repo add kwasm http://kwasm.sh/kwasm-operator/
+
+
 init:
     kn quickstart kind
     kubectl patch configmap config-deployment -n knative-serving -p '{"data": {"registries-skipping-tag-resolving": "localhost:5001"} }'
@@ -5,9 +12,6 @@ init:
     kubectl annotate node --all --overwrite kwasm.sh/kwasm-node=true
     helm upgrade --install infra deploy/infra
     kubectl patch configmap config-features -n knative-serving -p '{"data": {"kubernetes.podspec-runtimeclassname": "enabled"} }'
-
-repo:
-    helm repo add kwasm http://kwasm.sh/kwasm-operator/
 
 clean:
     kind delete cluster -n knative

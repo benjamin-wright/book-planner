@@ -1,0 +1,13 @@
+image IMAGE_TAG: build
+    docker buildx build \
+        --platform wasi/wasm32 \
+        -f ../../../../docker/wasm.Dockerfile \
+        -t {{IMAGE_TAG}} \
+        --build-arg "EXE_NAME=auth-get-login.wasm" \
+        .
+
+build:
+    rm ../../../../target/wasm32-wasi/release/auth-get-login.wasm tmp/auth-get-login.wasm
+    cargo build --target wasm32-wasi --release --bin auth-get-login
+    mkdir -p tmp
+    cp ../../../../target/wasm32-wasi/release/auth-get-login.wasm tmp/auth-get-login.wasm

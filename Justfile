@@ -10,6 +10,7 @@ init: cluster resources wasm
 cluster:
     kn quickstart kind --install-serving
     kubectl patch configmap config-deployment -n knative-serving -p '{"data": {"registries-skipping-tag-resolving": "localhost:5001"} }'
+    '{"spec":{"template":{"spec":{"containers":[{"name":"controller",env:{"KOURIER_EXTAUTHZ_HOST":""}}]}}}}'
 
 resources:
     kubectl patch deployment activator -n knative-serving -p '{"spec":{"template":{"spec":{"containers":[{"name":"activator","resources":{"requests":{"cpu": "100m"}}}]}}}}'

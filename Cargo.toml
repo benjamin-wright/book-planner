@@ -1,5 +1,5 @@
 [package]
-name = "book-planner"
+name = "book_planner"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,9 +9,13 @@ edition = "2021"
 name = "auth-get-login"
 path = "src/cmd/auth/get-login/main.rs"
 
+[[bin]]
+name = "auth-get-login-fn"
+path = "src/cmd/auth/get-login-fn/main.rs"
+
 [dependencies]
 anyhow = "1.0"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 hyper_wasi = { version = "0.15", features = ["full"] }
-tokio_wasi = { version = "1", features = ["io-util", "fs", "net", "time", "rt", "macros"] }
+tokio_wasi = { version = "1.25.1", features = ["io-util", "fs", "net", "time", "rt", "macros", "signal"] }

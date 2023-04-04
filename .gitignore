@@ -1,4 +1,6 @@
 /target
+**/tmp
 *.wasm
 *.tgz
 .DS_Store
+.scratch

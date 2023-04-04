@@ -15,6 +15,10 @@ spec:
         autoscaling.knative.dev/max-scale: "10"
     spec:
       runtimeClassName: crun
+      timeoutSeconds: 2
       containers:
-      - name: wasm-app
+      - name: wasm-apps
         image: {{ .Values.image }}
+      traffic:
+      - latestRevision: true
+        percent: 100

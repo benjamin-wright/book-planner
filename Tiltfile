@@ -5,6 +5,12 @@ k8s_kind(
     image_json_path='{.spec.template.spec.containers[*].image}'
 )
 
+local_resource(
+  'rust',
+  'just build',
+  ['src']
+)
+
 def knative_fn(name):
   custom_build(
     name,
@@ -19,8 +25,13 @@ def knative_fn(name):
     set=[
       "name=%s" % name,
       "image=%s" % name
-    ]
+    ],
   ))
+
+  k8s_resource(
+    name,
+    resource_deps=['rust']
+  )
 
 knative_fn('auth-get-login')
 knative_fn('draughts-get-games')

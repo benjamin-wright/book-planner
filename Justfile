@@ -27,7 +27,11 @@ clean:
     -docker stop kind-registry
     -docker rm kind-registry
 
-build APP_NAME:
+build:
+    cargo build --target wasm32-wasi
+    node src/tools/copy-wasms.js
+
+app APP_NAME:
     cargo build --target wasm32-wasi --bin {{APP_NAME}}
 
     mkdir -p bin/{{APP_NAME}}
@@ -39,3 +43,6 @@ image APP_NAME IMAGE_TAG:
         -f docker/wasm.Dockerfile \
         -t {{IMAGE_TAG}} \
         "bin/{{APP_NAME}}"
+
+endpoint APP_NAME:
+    curl http://{{APP_NAME}}.default.127.0.0.1.sslip.io

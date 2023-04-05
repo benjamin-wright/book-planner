@@ -1,8 +1,6 @@
 # BOOK PLANNER
 
 ## TODO
-
-- rust build up-front to avoid shared crate locks
 - specific-binary rebuild on demand for quicker iteration
 - move knative_fn shared tilt func to separate place
 - tooling to

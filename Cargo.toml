@@ -7,11 +7,11 @@ edition = "2021"
 
 [[bin]]
 name = "auth-get-login"
-path = "src/cmd/auth/get-login/main.rs"
+path = "src/cmd/auth/get-login.rs"
 
 [[bin]]
-name = "auth-get-login-fn"
-path = "src/cmd/auth/get-login-fn/main.rs"
+name = "draughts-get-games"
+path = "src/cmd/draughts/get-games.rs"
 
 [dependencies]
 anyhow = "1.0"

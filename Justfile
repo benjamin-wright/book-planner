@@ -10,7 +10,6 @@ init: cluster resources wasm
 cluster:
     kn quickstart kind --install-serving
     kubectl patch configmap config-deployment -n knative-serving -p '{"data": {"registries-skipping-tag-resolving": "localhost:5001"} }'
-    '{"spec":{"template":{"spec":{"containers":[{"name":"controller",env:{"KOURIER_EXTAUTHZ_HOST":""}}]}}}}'
 
 resources:
     kubectl patch deployment activator -n knative-serving -p '{"spec":{"template":{"spec":{"containers":[{"name":"activator","resources":{"requests":{"cpu": "100m"}}}]}}}}'
@@ -24,4 +23,19 @@ wasm:
     kubectl patch configmap config-features -n knative-serving -p '{"data": {"kubernetes.podspec-runtimeclassname": "enabled"} }'
 
 clean:
-    kind delete cluster -n knative
+    -kind delete cluster -n knative
+    -docker stop kind-registry
+    -docker rm kind-registry
+
+build APP_NAME:
+    cargo build --target wasm32-wasi --bin {{APP_NAME}}
+
+    mkdir -p bin/{{APP_NAME}}
+    cp "target/wasm32-wasi/debug/{{APP_NAME}}.wasm" "bin/{{APP_NAME}}/app.wasm"
+
+image APP_NAME IMAGE_TAG:
+    docker buildx build \
+        --platform wasi/wasm32 \
+        -f docker/wasm.Dockerfile \
+        -t {{IMAGE_TAG}} \
+        "bin/{{APP_NAME}}"

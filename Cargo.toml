@@ -6,7 +6,8 @@ edition = "2021"
 [workspace]
 members = [
     "src/wasm",
-    "src/rust"
+    "src/rust",
+    "src/containers",
 ]
 
 [dependencies]

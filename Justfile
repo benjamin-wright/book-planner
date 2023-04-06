@@ -22,10 +22,6 @@ wasm:
     helm upgrade --install infra deploy/infra
     kubectl patch configmap config-features -n knative-serving -p '{"data": {"kubernetes.podspec-runtimeclassname": "enabled"} }'
 
-cockroach:
-    kubectl apply -f https://raw.githubusercontent.com/cockroachdb/cockroach-operator/master/install/crds.yaml
-    kubectl apply -f https://raw.githubusercontent.com/cockroachdb/cockroach-operator/master/install/operator.yaml
-
 clean:
     -kind delete cluster -n knative
     -docker stop kind-registry
@@ -37,6 +33,8 @@ tools:
 build:
     cd src/wasm && cargo build --target wasm32-wasi
     node src/tools/copy-wasms.js
+
+    cd src/containers && cargo zigbuild --target i686-unknown-linux-gnu
 
 app APP_NAME:
     cargo build --target wasm32-wasi --bin {{APP_NAME}}

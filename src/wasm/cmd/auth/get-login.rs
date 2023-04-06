@@ -1,9 +1,9 @@
-use book_planner::server;
+use book_planner_wasm::server;
 
 server!("GET", {
     let response = Response::builder()
         .status(200)
-        .body(Body::from("These are your games"))
+        .body(Body::from("Hi from this one"))
         .unwrap();
 
     Ok(response)

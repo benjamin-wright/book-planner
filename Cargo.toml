@@ -3,18 +3,12 @@ name = "book_planner"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[[bin]]
-name = "auth-get-login"
-path = "src/cmd/auth/get-login.rs"
-
-[[bin]]
-name = "draughts-get-games"
-path = "src/cmd/draughts/get-games.rs"
+[workspace]
+members = [
+    "src/wasm",
+    "src/rust"
+]
 
 [dependencies]
-anyhow = "1.0"
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
-hyper_wasi = { version = "0.15", features = ["full"] }
-tokio_wasi = { version = "1.25.1", features = ["io-util", "fs", "net", "time", "rt", "macros", "signal"] }
+book_planner_wasm = { path = "src/wasm"}
+book_planner_rust = { path = "src/rust"}

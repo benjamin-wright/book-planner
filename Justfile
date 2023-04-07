@@ -34,7 +34,9 @@ build:
     cd src/wasm && cargo build --target wasm32-wasi
     node src/tools/copy-wasms.js
 
-    cd src/containers && cargo zigbuild --target i686-unknown-linux-gnu
+    cd src/containers && cargo zigbuild --target x86_64-unknown-linux-gnu --release
+    mkdir -p bin/db-operator
+    cp target/x86_64-unknown-linux-gnu/release/db_operator bin/db-operator/app
 
 app APP_NAME:
     cargo build --target wasm32-wasi --bin {{APP_NAME}}
@@ -42,10 +44,16 @@ app APP_NAME:
     mkdir -p bin/{{APP_NAME}}
     cp "target/wasm32-wasi/debug/{{APP_NAME}}.wasm" "bin/{{APP_NAME}}/app.wasm"
 
-image APP_NAME IMAGE_TAG:
+fn_image APP_NAME IMAGE_TAG:
     docker buildx build \
         --platform wasi/wasm32 \
         -f docker/wasm.Dockerfile \
+        -t {{IMAGE_TAG}} \
+        "bin/{{APP_NAME}}"
+
+container_image APP_NAME IMAGE_TAG:
+    docker buildx build \
+        -f docker/rust.Dockerfile \
         -t {{IMAGE_TAG}} \
         "bin/{{APP_NAME}}"
 

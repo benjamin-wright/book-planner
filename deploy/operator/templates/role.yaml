@@ -1,0 +1,22 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}
+rules:
+{{- range .Values.rbacs }}
+- apiGroups:
+  {{- range .apiGroups }}
+  - {{ . }}
+  {{- end }}
+  resources:
+  {{- range .resources }}
+  - {{ . }}
+  {{- end }}
+  verbs:
+  {{- range .verbs }}
+  - {{ . }}
+  {{- end }}
+{{- end }}
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]

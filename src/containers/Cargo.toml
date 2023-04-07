@@ -10,4 +10,4 @@ path = "db-operator/main.rs"
 [dependencies]
 kube = { version = "0.80.0", default-features = false, features = ["client", "rustls-tls", "runtime", "derive"] }
 k8s-openapi = { version = "0.17.0", features = ["v1_25"] }
-tokio = "1.14.0"
+tokio = { version = "1.14.0", features = ["macros", "io-util", "rt-multi-thread"] }

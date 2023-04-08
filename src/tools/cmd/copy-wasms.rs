@@ -21,7 +21,7 @@ fn main() {
     }
 
     let dir = &argv[1];
-    let target_path = &argv[2];
+    let target_path = format!("{}/{}", dir, &argv[2]);
     
     let cargofile = format!("{}/Cargo.toml", dir);
 
@@ -45,7 +45,7 @@ fn main() {
         match copy(&bin.name, &target_path){
             Ok(()) => {},
             Err(err) => {
-                println!("Failed to copy files: {:?}", err);
+                println!("Failed to copy files: {:?}", err.message);
                 return
             }
         };
@@ -66,7 +66,8 @@ fn copy(binary: &String, target_path: &String) -> Result<(), Error> {
         }
     };
 
-    let mut target = None;
+    let mut source = None;
+    let mut destination = None;
 
     for path in paths {
         match path {
@@ -74,11 +75,13 @@ fn copy(binary: &String, target_path: &String) -> Result<(), Error> {
                 let fileentry = path.file_name().to_str().unwrap().to_owned();
 
                 match fileentry {
-                    entry if &entry == binary => {
-                        target = Some(entry.to_string());
-                    },
                     entry if entry == format!("{}.wasm", binary) => {
-                        target = Some(entry.to_string());
+                        source = Some(format!("{}/{}", target_path, entry));
+                        destination = Some(format!("bin/{}/app.wasm", binary));
+                    },
+                    entry if &entry == binary => {
+                        source = Some(format!("{}/{}", target_path, entry));
+                        destination = Some(format!("bin/{}/app", binary));
                     },
                     _ => {}
                 }
@@ -89,10 +92,7 @@ fn copy(binary: &String, target_path: &String) -> Result<(), Error> {
         }
     }
 
-    let source = format!("{}/{}", target_path, target.unwrap());
-    let destination = format!("bin/{}/app.wasm", binary);
-
-    println!("Copying {} to {}", source, destination);
+    println!("Copying {:?} to {:?}", source, destination);
 
     Ok(())
 }

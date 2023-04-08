@@ -16,7 +16,5 @@ path = "lib.rs"
 
 [dependencies]
 anyhow = "1.0"
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
 hyper_wasi = { version = "0.15", features = ["full"] }
 tokio_wasi = { version = "1.25.1", features = ["io-util", "fs", "net", "time", "rt", "macros", "signal"] }

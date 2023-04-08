@@ -1,8 +1,0 @@
-[package]
-name = "book_planner_rust"
-version = "0.1.0"
-edition = "2021"
-
-[[bin]]
-name = "db_operator"
-path = "db-operator/main.rs"

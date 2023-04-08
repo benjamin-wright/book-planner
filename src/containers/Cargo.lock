@@ -24,12 +24,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "anyhow"
-version = "1.0.70"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7de8ce5e0f9f8d88245311066a578d72b7af3e7088f32783804676302df237e4"
-
-[[package]]
 name = "async-trait"
 version = "0.1.68"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -82,35 +76,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
-name = "book_planner"
-version = "0.1.0"
-dependencies = [
- "book_planner_rust",
- "book_planner_wasm",
-]
-
-[[package]]
 name = "book_planner_containers"
 version = "0.1.0"
 dependencies = [
  "k8s-openapi",
  "kube",
  "tokio",
-]
-
-[[package]]
-name = "book_planner_rust"
-version = "0.1.0"
-
-[[package]]
-name = "book_planner_wasm"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "hyper_wasi",
- "serde",
- "serde_json",
- "tokio_wasi",
 ]
 
 [[package]]
@@ -405,32 +376,13 @@ dependencies = [
 
 [[package]]
 name = "getrandom"
-version = "0.2.8"
+version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c05aeb6a22b8f62540c194aac980f2115af067bfe15a0734d7277a768d396b31"
+checksum = "c85e1d9ab2eadba7e5040d4e09cbd6d072b76a557ad64e797c2cb9d4da21d7e4"
 dependencies = [
  "cfg-if",
  "libc",
  "wasi",
-]
-
-[[package]]
-name = "h2_wasi"
-version = "0.3.15"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15278003b75338787173b9fced9e4b6eda445a1254101e2398bbef2105657c9b"
-dependencies = [
- "bytes",
- "fnv",
- "futures-core",
- "futures-sink",
- "futures-util",
- "http",
- "indexmap",
- "slab",
- "tokio-util_wasi",
- "tokio_wasi",
- "tracing",
 ]
 
 [[package]]
@@ -536,30 +488,6 @@ dependencies = [
  "pin-project-lite",
  "tokio",
  "tokio-io-timeout",
-]
-
-[[package]]
-name = "hyper_wasi"
-version = "0.15.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7fe2af6e9e11f451560f8eaf059e3ac4caef61fddda8654242a0cebf36a08cec"
-dependencies = [
- "bytes",
- "futures-channel",
- "futures-core",
- "futures-util",
- "h2_wasi",
- "http",
- "http-body",
- "httparse",
- "httpdate",
- "itoa",
- "pin-project-lite",
- "tokio_wasi",
- "tower-service",
- "tracing",
- "want",
- "wasmedge_wasi_socket",
 ]
 
 [[package]]
@@ -836,19 +764,6 @@ dependencies = [
  "libc",
  "log",
  "wasi",
- "windows-sys 0.45.0",
-]
-
-[[package]]
-name = "mio_wasi"
-version = "0.8.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "29b8a44f0ea59399ae977e023e3af4abcc93b68593c307f464833b674f3d1011"
-dependencies = [
- "libc",
- "log",
- "wasi",
- "wasmedge_wasi_socket",
  "windows-sys 0.45.0",
 ]
 
@@ -1379,7 +1294,7 @@ dependencies = [
  "pin-project-lite",
  "signal-hook-registry",
  "socket2",
- "tokio-macros 2.0.0",
+ "tokio-macros",
  "windows-sys 0.45.0",
 ]
 
@@ -1391,17 +1306,6 @@ checksum = "30b74022ada614a1b4834de765f9bb43877f910cc8ce4be40e89042c9223a8bf"
 dependencies = [
  "pin-project-lite",
  "tokio",
-]
-
-[[package]]
-name = "tokio-macros"
-version = "1.8.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d266c00fde287f55d3f1c3e96c500c362a2b8c695076ec180f27918820bc6df8"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 1.0.109",
 ]
 
 [[package]]
@@ -1439,39 +1343,6 @@ dependencies = [
  "slab",
  "tokio",
  "tracing",
-]
-
-[[package]]
-name = "tokio-util_wasi"
-version = "0.7.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b7c1741fa976df8c5adc7748a3769f1317aff9df6752bd33982b4e2d8a510f08"
-dependencies = [
- "bytes",
- "futures-core",
- "futures-sink",
- "pin-project-lite",
- "tokio_wasi",
- "tracing",
-]
-
-[[package]]
-name = "tokio_wasi"
-version = "1.25.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "79a0b12b61ddfb9903d57b2db3c50b959c0b5239e169644c0b3659696ba4c00e"
-dependencies = [
- "autocfg",
- "bytes",
- "libc",
- "memchr",
- "mio_wasi",
- "pin-project-lite",
- "signal-hook-registry",
- "socket2",
- "tokio-macros 1.8.2",
- "wasmedge_wasi_socket",
- "windows-sys 0.45.0",
 ]
 
 [[package]]
@@ -1690,15 +1561,6 @@ name = "wasm-bindgen-shared"
 version = "0.2.84"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0046fef7e28c3804e5e38bfa31ea2a0f73905319b677e57ebe37e49358989b5d"
-
-[[package]]
-name = "wasmedge_wasi_socket"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ced1141c1b396ada9db93d9cebca51d600e24825454661157a7429d77421269f"
-dependencies = [
- "libc",
-]
 
 [[package]]
 name = "web-sys"

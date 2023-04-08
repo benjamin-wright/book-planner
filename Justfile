@@ -5,18 +5,18 @@ deps-osx:
     brew install knative-sandbox/kn-plugins/quickstart
     helm repo add kwasm http://kwasm.sh/kwasm-operator/
 
-init: cluster resources wasm
+init: infra-cluster infra-resources infra-wasm
 
-cluster:
+infra-cluster:
     kn quickstart kind --install-serving
     kubectl patch configmap config-deployment -n knative-serving -p '{"data": {"registries-skipping-tag-resolving": "localhost:5001"} }'
 
-resources:
+infra-resources:
     kubectl patch deployment activator -n knative-serving -p '{"spec":{"template":{"spec":{"containers":[{"name":"activator","resources":{"requests":{"cpu": "100m"}}}]}}}}'
     kubectl patch deployment net-kourier-controller -n knative-serving -p '{"spec":{"template":{"spec":{"containers":[{"name":"controller","resources":{"requests":{"cpu": "100m"}}}]}}}}'
     kubectl patch deployment 3scale-kourier-gateway -n kourier-system -p '{"spec":{"template":{"spec":{"containers":[{"name":"kourier-gateway","resources":{"requests":{"cpu": "100m"}}}]}}}}'
 
-wasm:
+infra-wasm:
     helm upgrade --install -n kwasm --create-namespace kwasm-operator kwasm/kwasm-operator
     kubectl annotate node --all --overwrite kwasm.sh/kwasm-node=true
     helm upgrade --install infra deploy/infra
@@ -30,13 +30,16 @@ clean:
 tools:
     cd src/rust && cargo build
 
-build:
+wasm:
     cd src/wasm && cargo build --target wasm32-wasi
-    node src/tools/copy-wasms.js
+    # node src/tools/copy-wasms.jsx
 
+containers:
     cd src/containers && cargo zigbuild --target x86_64-unknown-linux-gnu --release
-    mkdir -p bin/db-operator
-    cp target/x86_64-unknown-linux-gnu/release/db_operator bin/db-operator/app
+    mkdir -p src/containers/bin/db-operator
+    cp src/containers/target/x86_64-unknown-linux-gnu/release/db_operator src/containers/bin/db-operator/app
+
+build: wasm containers
 
 app APP_NAME:
     cargo build --target wasm32-wasi --bin {{APP_NAME}}
@@ -59,3 +62,6 @@ container_image APP_NAME IMAGE_TAG:
 
 endpoint APP_NAME:
     curl http://{{APP_NAME}}.default.127.0.0.1.sslip.io
+
+dev:
+    tilt up

@@ -53,36 +53,13 @@ impl Monitor {
             
             let result = watcher(pods, lp).try_for_each(|event| async {
                 let result = match event {
-                    Event::Applied(deployment) => {
-                        let replicas = Monitor::get_deployment_replicas(deployment);
-
-                        println!("cockroachDB update: {:?} ready", replicas);
-
-                        if replicas > 0 {
-                            tx.send(ReadyState::Ready).await
-                        } else {
-                            tx.send(ReadyState::NotReady).await
-                        }
-                    },
-                    Event::Deleted(_deployment) => {
-                        println!("cockroachDB deleted");
-                        tx.send(ReadyState::Missing).await
-                    },
+                    Event::Applied(deployment) => tx.send(Monitor::get_deployment_ready(deployment)).await,
+                    Event::Deleted(_deployment) => tx.send(ReadyState::Missing).await,
                     Event::Restarted(deployments) => {
-                        println!("cockroachDB watch restarted");
                         if deployments.len() == 1 {
                             let deployment = deployments[0].clone();
-                            let replicas = Monitor::get_deployment_replicas(deployment);
-
-                            if replicas > 0 {
-                                println!("cockroachdb deployment ready ({} replicas)", replicas);
-                                tx.send(ReadyState::Ready).await
-                            } else {
-                                println!("cockroachdb deployment not ready");
-                                tx.send(ReadyState::NotReady).await
-                            }
+                            tx.send(Monitor::get_deployment_ready(deployment)).await
                         } else {
-                            println!("No cockroachdb deployment found");
                             tx.send(ReadyState::Missing).await
                         }
                     }
@@ -106,15 +83,21 @@ impl Monitor {
         return rx;
     }
 
-    fn get_deployment_replicas(d: Deployment) -> i32 {
+    fn get_deployment_ready(d: Deployment) -> ReadyState {
         let status = match d.status {
             Some(status) => status,
-            None => return 0
+            None => return ReadyState::NotReady
         };
 
-        match status.available_replicas {
+        let replicas = match status.available_replicas {
             Some(replicas) => replicas,
-            None => return 0
+            None => return ReadyState::NotReady
+        };
+
+        if replicas > 0 {
+            ReadyState::Ready
+        } else {
+            ReadyState::NotReady
         }
     }
 

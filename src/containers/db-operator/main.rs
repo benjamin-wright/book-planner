@@ -1,17 +1,18 @@
-use k8s_openapi::api::core::v1::Pod;
-use kube::{
-    api::{ListParams},
-    Api,
-    Client
-};
+mod deployment;
+use deployment::Monitor;
 
 #[tokio::main()]
 async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    let client = Client::try_default().await?;
-    let pods: Api<Pod> = Api::default_namespaced(client);
-    let lp = ListParams::default();
-    let p = pods.list(&lp).await?;
-    println!("Got pod with containers: {:?}", p);
+    let monitor = Monitor::new().await?;
 
-    Ok(())
+    monitor.start();
+
+    loop {
+        // match monitor.cockroach_exists().await {
+        //     Ok(exists) => println!("database exists: {}", exists),
+        //     Err(err) => println!("oops: {:?}", err)
+        // };
+        
+        std::thread::sleep(std::time::Duration::from_millis(1000));
+    }
 }

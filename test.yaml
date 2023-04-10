@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cockroach-db
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: cockroach-db
+  template:
+    metadata:
+      labels:
+        name: cockroach-db
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: cockroach-db
+        resources:
+          limits:
+            cpu: 100m
+            memory: "64Mi"
+          requests:
+            cpu: 50m
+            memory: "64Mi"

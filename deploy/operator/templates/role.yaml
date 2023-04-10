@@ -17,6 +17,3 @@ rules:
   - {{ . }}
   {{- end }}
 {{- end }}
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "watch", "list"]

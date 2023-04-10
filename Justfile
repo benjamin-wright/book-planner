@@ -38,9 +38,9 @@ wasm:
     copy-wasms src/wasm target/wasm32-wasi/debug
 
 containers:
-    cd src/containers && cargo zigbuild --target x86_64-unknown-linux-gnu
+    cd src/containers && cargo zigbuild --target x86_64-unknown-linux-gnu --release
     rm -rf src/containers/bin
-    copy-wasms src/containers target/x86_64-unknown-linux-gnu/debug
+    copy-wasms src/containers target/x86_64-unknown-linux-gnu/release
 
 build: tools wasm containers
 
